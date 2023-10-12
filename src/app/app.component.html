@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leistung der Solaranlage</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 100%; /* Breite für alle Geräte */
+            margin: 0 auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+        button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Leistung der Solaranlage</h1>
+        <label for="streetInput">Straße:</label>
+        <input
+            type="text"
+            id="streetInput"
+            placeholder="Geben Sie hier Ihre Straße ein"
+            title="Straße eingeben"
+            aria-label="Straße eingeben"
+            aria-describedby="addressInputDesc1"
+        />
+
+        <label for="houseNumberInput">Hausnummer:</label>
+        <input
+            type="text"
+            id="houseNumberInput"
+            placeholder="Hausnummer"
+            title="Hausnummer eingeben"
+            aria-label="Hausnummer eingeben"
+            aria-describedby="addressInputDesc3"
+        />
+
+        <label for="zipInput">PLZ:</label>
+        <input
+            type="text"
+            id="zipInput"
+            placeholder="PLZ"
+            title="PLZ eingeben"
+            aria-label="PLZ eingeben"
+            aria-describedby="addressInputDesc4"
+        />
+
+        <label for="cityInput">Stadt:</label>
+        <input
+            type="text"
+            id="cityInput"
+            placeholder="Stadt"
+            title="Stadt eingeben"
+            aria-label="Stadt eingeben"
+            aria-describedby="addressInputDesc5"
+        />
+
+        <label for="countryInput">Land:</label>
+        <input
+            type="text"
+            id="countryInput"
+            placeholder="Land"
+            title="Land eingeben"
+            aria-label="Land eingeben"
+            aria-describedby="addressInputDesc6"
+        />
+
+        <label for="stateInput">Bundesland:</label>
+        <input
+            type="text"
+            id="stateInput"
+            placeholder="Bundesland"
+            title="Bundesland eingeben"
+            aria-label="Bundesland eingeben"
+            aria-describedby="addressInputDesc7"
+        />
+
+        <label for="performanceInput">Leistung der Solaranlage:</label>
+        <input
+            type="text"
+            id="performanceInput"
+            placeholder="Leistung"
+            title="Leistung eingeben"
+            aria-label="Leistung eingeben"
+            aria-describedby="addressInputDesc8"
+        />
+
+        <button type="button" onclick="BerechneLeistungProTag()">Berechnen</button>
+
+        <h2>Leistung der Solaranlage:</h2>
+        <div id="worthInfo"></div>
+    </div>
+
+    <script>
+        async function BerechneLeistungProTag() {
+            const streetInput = document.getElementById("streetInput").value;
+            const houseNumberInput = document.getElementById("houseNumberInput").value;
+            const zipInput = document.getElementById("zipInput").value;
+            const cityInput = document.getElementById("cityInput").value;
+            const countryInput = document.getElementById("countryInput").value;
+            const stateInput = document.getElementById("stateInput").value;
+            const performanceInput = document.getElementById("performanceInput").value;
+
+            // Erstelle ein JSON-Objekt mit den Adressinformationen
+            const address = {
+                street: streetInput,
+                houseNumber: houseNumberInput,
+                zip: zipInput,
+                city: cityInput,
+                country: countryInput,
+                performanceInput: performanceInput,
+                state: stateInput,
+            };
+
+            // Zeige ein Ladesymbol an
+            document.getElementById("worthInfo").innerHTML = "Laden...";
+            <!-- Sends address information as a JSON object to the API endpoint at http://localhost:8080/rest/solarapi, and displays the result on the page. If an error occurs, displays an error message. -->
+
+            try {
+              // Send the address information as a JSON object to your API
+              const response = await fetch("http://localhost:8080/rest/solarapi", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify(address),
+              });
+              if (!response.ok) {
+                throw new Error("Network response was not ok");
+              }
+              const data = await response.json();
+              // Display the result from your API
+              document.getElementById("worthInfo").innerHTML =
+                "Leistung der Solaranlage: " + data.performance;
+            } catch (error) {
+              // Display an error message
+              document.getElementById("worthInfo").innerHTML = "Fehler: " + error.message;
+            // Display an error message
+                          document.getElementById("worthInfo").innerHTML = "Fehler: " + error.message;
+                          console.error(error);
+                        }
+
+                        try {
+                          // Send the address information as a JSON object to your API
+                          const response = await fetch("http://localhost:8080/rest/solarapi", {
+                            method: "POST",
+                            headers: {
+                              "Content-Type": "application/json",
+                            },
+                            body: JSON.stringify(address),
+                          });
+                          if (!response.ok) {
+                            throw new Error("Network response was not ok");
+                          }
+                          const data = await response.json();
+                          // Display the result from your API
+                          document.getElementById("worthInfo").innerHTML =
+                            "Leistung der Solaranlage: " + data.performance;
+                        } catch (error) {
+                          // Display an error message
+                          document.getElementById("worthInfo").innerHTML = "Fehler: " + error.message;
+                          console.error(error);
+                        }
+              // Display an error message
+              document.getElementById("worthInfo").innerHTML = "Fehler: " + error.message;
+              console.error(error);
+            try {
+              // Send the address information as a JSON object to your API
+              const response = await fetch("http://localhost:8080/rest/solarapi", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify(address),
+              });
+              if (!response.ok) {
+                throw new Error("Network response was not ok");
+              }
+              const data = await response.json();
+              // Display the result from your API
+              document.getElementById("worthInfo").innerHTML =
+                "Leistung der Solaranlage: " + data.performance;
+            } catch (error) {
+              // Display an error message
+              document.getElementById("worthInfo").innerHTML = "Fehler: " + error.message;
+              console.error(error);
+            }
+        }
+    </script>
+</body>
+</html>
